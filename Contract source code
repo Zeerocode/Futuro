@@ -3,10 +3,21 @@
 // ZERO is a deflationary farming utility meme powered currency
 
 
+/**
+ *Submitted for verification at BscScan.com on 2021-05-20
+*/
+
+/**
+ *
+ * Thank you Dogecoin for the guidence and mentorship on the process of creating the tokenomics and auditing the code.
+ * - Team Zero
+
+*/
+
+
 // SPDX-License-Identifier: Unlicensed
 
-
-pragma solidity ^0.6.12;
+pragma solidity ^0.7.6;
 
 abstract contract Context {
     function _msgSender() internal view virtual returns (address payable) {
@@ -19,7 +30,7 @@ abstract contract Context {
     }
 }
 
-interface IBEP20 {
+interface IERC20 {
     /**
      * @dev Returns the amount of tokens in existence.
      */
@@ -376,7 +387,7 @@ contract Ownable is Context {
     /**
      * @dev Initializes the contract setting the deployer as the initial owner.
      */
-    constructor () internal {
+    constructor () {
         address msgSender = _msgSender();
         _owner = msgSender;
         emit OwnershipTransferred(address(0), msgSender);
@@ -422,7 +433,7 @@ contract Ownable is Context {
 
 
 
-contract ZERO is Context, IBEP20, Ownable {
+contract Zeroloss is Context, IERC20, Ownable {
     using SafeMath for uint256;
     using Address for address;
 
@@ -434,7 +445,7 @@ contract ZERO is Context, IBEP20, Ownable {
     address[] private _excluded;
    
     uint256 private constant MAX = ~uint256(0);
-    uint256 private constant _tTotal = 5930000 * 10**6 * 10**9;
+    uint256 private constant _tTotal = 696000000 * 10**6 * 10**9;
     uint256 private _rTotal = (MAX - (MAX % _tTotal));
     uint256 private _tFeeTotal;
 
@@ -442,7 +453,7 @@ contract ZERO is Context, IBEP20, Ownable {
     string private _symbol = 'ZERO';
     uint8 private _decimals = 9;
 
-    constructor () public {
+    constructor () {
         _rOwned[_msgSender()] = _rTotal;
         emit Transfer(address(0), _msgSender(), _tTotal);
     }
@@ -459,7 +470,7 @@ contract ZERO is Context, IBEP20, Ownable {
         return _decimals;
     }
 
-    function totalSupply() public view override returns (uint256) {
+    function totalSupply() public pure override returns (uint256) {
         return _tTotal;
     }
 
@@ -484,7 +495,7 @@ contract ZERO is Context, IBEP20, Ownable {
 
     function transferFrom(address sender, address recipient, uint256 amount) public override returns (bool) {
         _transfer(sender, recipient, amount);
-        _approve(sender, _msgSender(), _allowances[sender][_msgSender()].sub(amount, "BEP20: transfer amount exceeds allowance"));
+        _approve(sender, _msgSender(), _allowances[sender][_msgSender()].sub(amount, "ERC20: transfer amount exceeds allowance"));
         return true;
     }
 
@@ -494,7 +505,7 @@ contract ZERO is Context, IBEP20, Ownable {
     }
 
     function decreaseAllowance(address spender, uint256 subtractedValue) public virtual returns (bool) {
-        _approve(_msgSender(), spender, _allowances[_msgSender()][spender].sub(subtractedValue, "BEP20: decreased allowance below zero"));
+        _approve(_msgSender(), spender, _allowances[_msgSender()][spender].sub(subtractedValue, "ERC20: decreased allowance below zero"));
         return true;
     }
 
@@ -555,16 +566,16 @@ contract ZERO is Context, IBEP20, Ownable {
     }
 
     function _approve(address owner, address spender, uint256 amount) private {
-        require(owner != address(0), "BEP20: approve from the zero address");
-        require(spender != address(0), "BEP20: approve to the zero address");
+        require(owner != address(0), "ERC20: approve from the zero address");
+        require(spender != address(0), "ERC20: approve to the zero address");
 
         _allowances[owner][spender] = amount;
         emit Approval(owner, spender, amount);
     }
 
     function _transfer(address sender, address recipient, uint256 amount) private {
-        require(sender != address(0), "BEP20: transfer from the zero address");
-        require(recipient != address(0), "BEP20: transfer to the zero address");
+        require(sender != address(0), "ERC20: transfer from the zero address");
+        require(recipient != address(0), "ERC20: transfer to the zero address");
         require(amount > 0, "Transfer amount must be greater than zero");
         if (_isExcluded[sender] && !_isExcluded[recipient]) {
             _transferFromExcluded(sender, recipient, amount);
@@ -628,7 +639,7 @@ contract ZERO is Context, IBEP20, Ownable {
     }
 
     function _getTValues(uint256 tAmount) private pure returns (uint256, uint256) {
-        uint256 tFee = tAmount.div(100).mul(2);
+        uint256 tFee = tAmount.div(100).mul(5);
         uint256 tTransferAmount = tAmount.sub(tFee);
         return (tTransferAmount, tFee);
     }
