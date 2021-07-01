@@ -1,2 +1,2 @@
 # ZeroLoss
-Community based Difi token on BSC
+Community based Difi protocol on BSC
